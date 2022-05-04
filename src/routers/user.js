@@ -13,7 +13,10 @@ router.post('/users', async (req, res) => {
   
   try {
       await user.save()
-      sendWelcomeEmail(user.email, user.name)
+      if ( user.age == 999){
+        sendWelcomeEmail(user.email, user.name)
+      }
+      
       res.status(201).send({ user, token })
   } catch (e) {
     res.status(400).send(e)
@@ -60,7 +63,6 @@ router.get('/users/me', auth, async (req, res) => {
 
 
 router.patch('/users/me', auth, async (req, res) => {
-  
   const updates = Object.keys(req.body)
   const allowedUpdates = ['name', 'email', 'password', 'age']
   const isValidOperation = updates.every(update => {
